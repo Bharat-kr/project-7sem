@@ -1,0 +1,40 @@
+.hero-container {
+    background-color: var(--darkBlue);
+    min-height: 100vh;
+}
+
+.hero-left {
+    width: 53%;
+}
+
+.hero-right {
+    width: 33%;
+}
+
+.hero-left h1 {
+    font-size: 2.9rem;
+    font-style: italic;
+}
+
+.hero-left p {
+    font-size: 1.15rem;
+    color: var(--lightGray);
+    margin: 1.5em 0;
+}
+
+.hero-right img {
+    margin-top: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+    }
+    .hero-left {
+        width: 100%;
+        margin-top: 1rem;
+    }
+    .hero-right {
+        width: 70%;
+    }
+}
