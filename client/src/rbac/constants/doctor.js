@@ -1,5 +1,7 @@
 import Home from '../../pages/Home/Home';
 import Landing from '../../pages/Landing/landing';
+import Login from '../../pages/Login/Login';
+import Signup from '../../pages/SignUp/signUp';
 
 const DOCTOR_ROUTES = [
     // {
@@ -10,7 +12,12 @@ const DOCTOR_ROUTES = [
     {
         link: '/signUp',
         name: 'SignUp',
-        component: < Home / >
+        component: < Signup / >
+    },
+    {
+        link: '/login',
+        name: 'Login',
+        component: < Login / >
     },
     {
         link: '/',
