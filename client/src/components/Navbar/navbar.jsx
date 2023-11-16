@@ -20,7 +20,7 @@ const Navbar = ({ displayLogin, displaySignUp }) => {
           )}
 
           {displaySignUp && (
-            <Link to="/register" className="primary-btn">
+            <Link to="/signUp" className="primary-btn">
               Register
             </Link>
           )}
