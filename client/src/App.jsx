@@ -1,11 +1,11 @@
-import styles from './App.module.scss';
+import  './App.css';
 import { Web3Provider } from './context/Web3Context';
 import RoleRoutes from './rbac/RoleRoutes';
 
 function App() {
   return (
     <Web3Provider>
-      <div className={styles.app}>
+      <div className="App">
         <RoleRoutes />
       </div>
     </Web3Provider>

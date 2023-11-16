@@ -1,23 +1,13 @@
-// App.module.scss
-$darkBlue: #2c3e50;
-$aquaBlue: #1abc9c;
-$lightGray: #e0e0e0;
-$sidebarColor: #E8F0F0;
-$portalBgColor: #FAFAFA;
-$navlinksColor: #9ba7a6;
-$prescriptionColor: #9affb0e5;
-$reportColor: #dab7f7e8;
-$labReportColor: #fed6a6e5;
 :root {
-    --darkBlue: #{$darkBlue};
-    --aquaBlue: #{$aquaBlue};
-    --lightGray: #{$lightGray};
-    --sidebarColor: #{$sidebarColor};
-    --portalBgColor: #{$portalBgColor};
-    --navlinksColor: #{$navlinksColor};
-    --prescriptionColor: #{$prescriptionColor};
-    --reportColor: #{$reportColor};
-    --labReportColor: #{$labReportColor};
+    --darkBlue: #2c3e50;
+    --aquaBlue: #1abc9c;
+    --lightGray: #e0e0e0;
+    --sidebarColor: #E8F0F0;
+    --portalBgColor: #FAFAFA;
+    --navlinksColor: #9ba7a6;
+    --prescriptionColor: #9affb0e5;
+    --reportColor: #dab7f7e8;
+    --labReportColor: #fed6a6e5;
 }
 
 * {
