@@ -18,19 +18,10 @@
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.{js,jsx,css,scss}\"",
     "clear": "rimraf build",
-    "generate-icon": "node src/icons/scripts/generate-icon-system",
-    "postinstall": "npx husky install"
+    "generate-icon": "node src/icons/scripts/generate-icon-system"
   },
   "author": "Bharat Kumar",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Bharat-kr/create-react-sass-app"
-  },
-  "keywords": [
-    "react",
-    "sass"
-  ],
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -52,8 +43,6 @@
   "devDependencies": {
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.3",
     "prettier": "^3.0.0"
   },
   "lint-staged": {
