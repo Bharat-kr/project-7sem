@@ -1,0 +1,117 @@
+:root {
+    --darkBlue: #2c3e50;
+    --aquaBlue: #1abc9c;
+    --lightGray: #e0e0e0;
+    --sidebarColor: #E8F0F0;
+    --portalBgColor: #FAFAFA;
+    --navlinksColor: #9ba7a6;
+    --prescriptionColor: #9affb0e5;
+    --reportColor: #dab7f7e8;
+    --labReportColor: #fed6a6e5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* background-color: var(--darkBlue); */
+    color: #fff;
+}
+
+html {
+    font-family: "Roboto";
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    width: 80%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.flex-start-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.flex-between-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-between-start {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.flex-between-center-col {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+img {
+    max-width: 100%;
+}
+
+.grayDash {
+    width: 50%;
+    height: 1px;
+    background-color: var(--aquaBlue);
+    margin: 1.5rem auto;
+}
+
+.patient-container {
+    background-color: var(--portalBgColor);
+    min-height: 100vh;
+    font-family: 'Poppins';
+    color: #333;
+}
+
+.portal-main {
+    width: 83%;
+    min-height: 100vh;
+}
+
+.portal-main-wrap {
+    border: 1px solid gray;
+    padding: 0 .5rem;
+}
+
+.portal-main-left,
+.portal-main-right {
+    width: 50%;
+    /* border: 1px solid red; */
+    padding: 1.5rem;
+}
+
+@media screen and (max-width: 768px) {
+    html {
+        font-size: 80%;
+    }
+    .container {
+        width: 85%;
+    }
+}
