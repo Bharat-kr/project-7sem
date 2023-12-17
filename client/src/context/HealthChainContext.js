@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { ethers } from 'ethers';
 import { contractAbi, contractAddress } from '../utils/constants';
 
@@ -14,6 +14,7 @@ const HealthChainContext = createContext({
 
   // Contract interaction functions
   connectWallet: () => {},
+  getStatus: () => {},
   addDoctor: (name, age, gender, hospitalName) => {},
   getDoctor: () => {},
   addPatient: (name, age, gender) => {},
@@ -21,7 +22,8 @@ const HealthChainContext = createContext({
   addDisease: (diseaseId, name, doctorAddress) => {},
   getDiseases: () => {},
   addRecord: (diseaseId, recordName, url, uploadDate) => {},
-  getRecords: (diseaseId) => {}
+  getRecords: (diseaseId) => {},
+  getPatientDiseases: (patient) => {}
 });
 
 const HealthChainProvider = ({ children }) => {
@@ -37,28 +39,24 @@ const HealthChainProvider = ({ children }) => {
     const connect = async () => {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // await provider.enable();
-        const signer = provider.getSigner();
-        console.log(signer);
-        const contract = new ethers.Contract(
-          // Your contract address
-          contractAddress,
-          contractAbi,
-          signer
-        );
-        const address = await signer.getAddress();
-        const role = await contract.getStatus();
-        console.log(role);
-
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractAbi, signer);
         setProvider(provider);
         setSigner(signer);
         setContract(contract);
-        setAccount(address);
-        setRole(role);
-        setIsConnecting(false);
+
+        const address = await window.ethereum.request({ method: 'eth_accounts' });
+        console.log(address);
+        if (address.length > 0) {
+          setAccount(address[0]);
+          const currRole = await contract.getStatus();
+          setRole(currRole);
+          console.log(currRole);
+        }
       } catch (error) {
         console.error(error);
         setError(error.message);
+      } finally {
         setIsConnecting(false);
       }
     };
@@ -69,29 +67,148 @@ const HealthChainProvider = ({ children }) => {
   // Function definitions: Replace with your contract function logic using 'contract' instance
 
   const connectWallet = async () => {
+    setIsConnecting(true);
     try {
-      await window.ethereum.enable();
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-      const address = await signer.getAddress();
-      const role = await contract.getStatus();
-
-      setProvider(provider);
-      setSigner(signer);
-      setContract(contract);
-      setAccount(address);
-      setRole(role);
-      setIsConnecting(false);
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts'
+      });
+      setAccount(accounts[0]);
+      if (accounts.length > 0) {
+        setAccount(accounts[0]);
+        const currRole = await contract.getStatus();
+        setRole(currRole);
+      }
     } catch (error) {
       console.error(error);
       setError(error.message);
+    } finally {
       setIsConnecting(false);
     }
   };
 
   // Add similar function definitions for other contract functionalities
 
+  const addDoctor = async (name, age, gender, hospital) => {
+    try {
+      const transaction = await contract.addDoctor(name, age, gender, hospital, {
+        gasPrice: ethers.utils.parseUnits('50', 'gwei'),
+        gasLimit: 1000000
+      });
+      const transactionReceipt = await transaction.wait();
+      if (transactionReceipt.status !== 1) {
+        alert('error message');
+        return;
+      }
+      console.log(transactionReceipt);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDoctor = async () => {
+    try {
+      const data = await contract.getDoctor();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addPatient = async (name, age, gender) => {
+    try {
+      const transaction = await contract.addPatient(name, age, gender, {
+        gasPrice: ethers.utils.parseUnits('50', 'gwei'),
+        gasLimit: 1000000
+      });
+      const transactionReceipt = await transaction.wait();
+      if (transactionReceipt.status !== 1) {
+        alert('error message');
+        return;
+      }
+      console.log(transactionReceipt);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getPatient = async () => {
+    try {
+      const data = await contract.getPatient();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addDisease = async (diseaseId, name, doctorAddress) => {
+    try {
+      const transaction = await contract.addDisease(diseaseId, name, doctorAddress, {
+        gasPrice: ethers.utils.parseUnits('50', 'gwei'),
+        gasLimit: 1000000
+      });
+      const transactionReceipt = await transaction.wait();
+      if (transactionReceipt.status !== 1) {
+        alert('error message');
+        return;
+      }
+      console.log(transactionReceipt);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDiseases = async () => {
+    try {
+      const data = await contract.getDiseases();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getPatientDiseases = async (patient) => {
+    try {
+      const data = await contract.getPatientDiseases(patient);
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAllPatients = async () => {
+    try {
+      const data = await contract.getAllPatients();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addRecord = async (name, url, uploadDate, diseaseId) => {
+    try {
+      const transaction = await contract.addRecord(name, url, uploadDate, diseaseId, {
+        gasPrice: ethers.utils.parseUnits('50', 'gwei'),
+        gasLimit: 1000000
+      });
+      const transactionReceipt = await transaction.wait();
+      if (transactionReceipt.status !== 1) {
+        alert('error message');
+        return;
+      }
+      console.log(transactionReceipt);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRecords = async () => {
+    try {
+      const data = await contract.getRecords();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const value = {
     provider,
     signer,
@@ -100,11 +217,22 @@ const HealthChainProvider = ({ children }) => {
     role,
     isConnecting,
     error,
-    connectWallet
-    // Add contract interaction functions
+    connectWallet,
+    addDoctor,
+    getDoctor,
+    getPatient,
+    addPatient,
+    getAllPatients,
+    addDisease,
+    getDiseases,
+    addRecord,
+    getRecords,
+    getPatientDiseases
   };
 
   return <HealthChainContext.Provider value={value}>{children}</HealthChainContext.Provider>;
 };
 
-export { HealthChainContext, HealthChainProvider };
+const useContract = () => useContext(HealthChainContext);
+
+export { useContract, HealthChainProvider };
