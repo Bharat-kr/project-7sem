@@ -23,7 +23,7 @@ describe("-> HealthChain Test", function () {
     const role = await healthChain.connect(doctor).getStatus();
     expect(role).to.equal("Doctor");
     expect(doc.name).to.equal("Dr. Smith");
-    expect(doc.wallet_address).to.equal(doctor.address);
+    expect(doc.walletAddress).to.equal(doctor.address);
   });
 
   it("should register a patient", async () => {
@@ -32,7 +32,7 @@ describe("-> HealthChain Test", function () {
     const role = await healthChain.connect(patient).getStatus();
     expect(role).to.equal("Patient");
     expect(pat.name).to.equal("Alice");
-    expect(pat.wallet_address).to.equal(patient.address);
+    expect(pat.walletAddress).to.equal(patient.address);
   });
 
   it("should allow patient to add disease and doctors to check there patients ", async () => {
@@ -45,7 +45,7 @@ describe("-> HealthChain Test", function () {
       .connect(patient)
       .addDisease(diseaseId, "Cancer", doctor.address);
     const patients = await healthChain.connect(doctor).getAllPatients();
-    expect(patients[0].wallet_address).to.equal(patient.address);
+    expect(patients[0].walletAddress).to.equal(patient.address);
 
     const patientDiseases = await healthChain
       .connect(doctor)

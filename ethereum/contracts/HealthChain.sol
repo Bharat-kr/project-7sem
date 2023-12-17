@@ -6,33 +6,35 @@ contract HealthChain {
     enum Role {
         Doctor, Patient
     }
-    mapping(address => Role) public roles;
+    mapping(address => Role) private roles;
+
     struct Record {
         string name;
         string url;
-        string upload_date;
+        string uploadDate;
     }
     
     struct Disease {
         string id;
         string name;
         address doctor;
-        uint256 created_at;
+        address patient;
+        uint256 createdAt;
     }
     
     struct Patient {
         string name;
-        uint256 age;
-        address wallet_address;
+        uint8 age;
+        address walletAddress;
         string gender;
     }
     
     struct Doctor {
         string name;
-        uint256 age;
+        uint8 age;
         string gender;
-        address wallet_address;
-        string hospital_name;
+        address walletAddress;
+        string hospitalName;
         address[] patients;
     }
     
@@ -40,13 +42,13 @@ contract HealthChain {
         string id;
         string name;
         Doctor doctor;
-        uint256 created_at;
+        uint256 createdAt;
     }
-    mapping(address => Patient) public patients;//all patients
-    mapping(address => Doctor) public doctors;//all doctors
-    mapping(string => Disease) public diseases;//all diseases
-    mapping(address => Disease[]) public patients_disease_map;//patients diseases
-    mapping(string => Record[]) public diesase_record_map; //illness to records map
+    mapping(address => Patient) private patients;//all patients
+    mapping(address => Doctor) private doctors;//all doctors
+    mapping(string => Disease) private diseases;//all diseases
+    mapping(address => Disease[]) private patients_disease_map;//patients diseases
+    mapping(string => Record[]) private diesase_record_map; //disease to records map
 
     //get initial status
     function getStatus() public view returns (string memory) {
@@ -63,13 +65,13 @@ contract HealthChain {
     function getDoctor() public view returns (Doctor memory) {
         return doctors[msg.sender];
     }
-    function addDoctor(string memory name , uint256 age , string memory gender, string memory hospital_name) public {
+    function addDoctor(string memory name , uint8 age , string memory gender, string memory hospitalName) public {
         Doctor memory newDoc;
         newDoc.name = name;
-        newDoc.wallet_address = msg.sender;
+        newDoc.walletAddress = msg.sender;
         newDoc.age = age;
         newDoc.gender = gender;
-        newDoc.hospital_name = hospital_name;
+        newDoc.hospitalName = hospitalName;
         doctors[msg.sender] = newDoc; 
         roles[msg.sender] = Role.Doctor;
     }
@@ -87,13 +89,8 @@ contract HealthChain {
     }
 
     // Patient functions
-    function addPatient(string memory name, uint256 age, string memory gender) public {
-        Patient memory newPatient;
-        newPatient.name = name;
-        newPatient.age = age;
-        newPatient.wallet_address = msg.sender;
-        newPatient.gender = gender;
-        patients[msg.sender] = newPatient;
+    function addPatient(string memory name, uint8 age, string memory gender) public {
+        patients[msg.sender] = Patient({name:name ,age:age , walletAddress:msg.sender , gender:gender});
         roles[msg.sender] = Role.Patient;
     }
 
@@ -107,33 +104,31 @@ contract HealthChain {
         for(uint256 i=0;i<currDiseases.length;i++){
             ans[i].id = currDiseases[i].id;
             ans[i].name = currDiseases[i].name;
-            ans[i].created_at = currDiseases[i].created_at;
+            ans[i].createdAt = currDiseases[i].createdAt;
             ans[i].doctor = doctors[currDiseases[i].doctor];
         }
         return ans;
     }
     
-    // Add illness for a patient
+    // Add disease for a patient
     function addDisease(string memory id, string memory diseaseName, address doctor_address) public {
-        Disease memory newDisease ;
-        newDisease.id = id;
-        newDisease.name = diseaseName;
-        newDisease.doctor = doctor_address;
         //doctor ke pass array hai patient ka map me update that
         doctors[doctor_address].patients.push(msg.sender);
         //end
-        newDisease.created_at = block.timestamp;
-        diseases[id] = newDisease;
-        patients_disease_map[msg.sender].push(newDisease);
+        diseases[id] = Disease({id :id , name : diseaseName , doctor:doctor_address , patient:msg.sender, createdAt:block.timestamp});
+        patients_disease_map[msg.sender].push(Disease({id :id , name : diseaseName , doctor:doctor_address , patient:msg.sender, createdAt:block.timestamp}));
     }
-    function addRecord(string memory name , string memory url , string memory upload_date , string memory id)public {
-        Record memory newRec;
-        newRec.name = name;
-        newRec.url = url;
-        newRec.upload_date = upload_date;
-        diesase_record_map[id].push(newRec);
+
+    //add records
+    function addRecord(string memory name , string memory url , string memory uploadDate , string memory diseaseId)public {
+        require(diseases[diseaseId].doctor == msg.sender ||diseases[diseaseId].patient == msg.sender  , "Unauthorized access to disease records");
+
+        diesase_record_map[diseaseId].push(Record({name: name, url: url, uploadDate: uploadDate}));
     }    
-    function getRecords(string memory id)public view returns(Record[] memory){
-        return diesase_record_map[id];
+
+    //get records
+    function getRecords(string memory diseaseId)public view returns(Record[] memory){
+        require(diseases[diseaseId].doctor == msg.sender ||diseases[diseaseId].patient == msg.sender  , "Unauthorized access to disease records");
+        return diesase_record_map[diseaseId];
     }
 }
