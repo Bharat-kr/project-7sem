@@ -1,4 +1,5 @@
 const { ethers } = require("hardhat");
+const fs = require("fs");
 
 const main = async () => {
   const [deployer] = await ethers.getSigners();
@@ -12,7 +13,16 @@ const main = async () => {
 };
 
 main()
-  .then(() => process.exit(0))
+  .then(() => {
+    fs.copyFile(
+      "./artifacts/contracts/HealthChain.sol/HealthChain.json",
+      "../client/src/utils/abi.json",
+      (err) => {
+        if (err) throw err;
+        console.log("File was copied to destination");
+      }
+    );
+  })
   .catch((error) => {
     console.error(error);
     process.exit(1);

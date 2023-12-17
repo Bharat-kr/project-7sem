@@ -1,14 +1,15 @@
-import  './App.css';
-import { Web3Provider } from './context/Web3Context';
+import './App.css';
+import { HealthChainProvider } from './context/HealthChainContext';
+// import { Web3Provider } from './context/Web3Context';
 import RoleRoutes from './rbac/RoleRoutes';
 
 function App() {
   return (
-    <Web3Provider>
+    <HealthChainProvider>
       <div className="App">
         <RoleRoutes />
       </div>
-    </Web3Provider>
+    </HealthChainProvider>
   );
 }
 
